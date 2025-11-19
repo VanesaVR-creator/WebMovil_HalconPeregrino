@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Halcón Peregrino – Dashboard</title>
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Bootstrap Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  />
+
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- PANTALLA DE BIENVENIDA -->
+  <div
+    class="splash-screen d-flex flex-column justify-content-center align-items-center"
+  >
+    <div class="spinner-border text-light mb-3" role="status"></div>
+    <h2 class="text-light fw-bold">Bienvenido usuario...</h2>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="dashboard">
+    <!-- Barra superior -->
+    <header class="top-bar d-flex align-items-center justify-content-between">
+      <div class="top-left">
+        <div id="time" class="time-text">--:--</div>
+        <div id="date" class="date-text">Cargando fecha…</div>
+      </div>
+
+      <div class="top-center">
+        <span class="app-name">Halcón Peregrino</span>
+      </div>
+
+      <div class="top-right d-flex align-items-center gap-2">
+        <div class="weather-pill d-flex align-items-center gap-2">
+          <i class="bi bi-cloud-sun"></i>
+          <span>25°C</span>
+        </div>
+
+        <!-- Botón modo oscuro / claro -->
+        <button
+          id="theme-toggle"
+          class="btn-theme"
+          type="button"
+          aria-label="Cambiar tema"
+        >
+          <i class="bi bi-moon"></i>
+        </button>
+
+        <div class="user-avatar">
+          <span>V</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- PANTALLA 1: DASHBOARD PRINCIPAL -->
+    <main
+      class="main-grid screen active-screen"
+      data-screen="dashboard"
+      id="screen-dashboard"
+    >
+      <!-- Card: Información del coche -->
+      <section class="card-dark car-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div>
+            <h6 class="card-title mb-1">Halcón Peregrino</h6>
+            <small class="text-muted">Prototipo eléctrico ITESS</small>
+          </div>
+
+          <!-- Botón "Listo para conducir" -->
+          <button
+            id="btn-ready"
+            type="button"
+            class="status-pill"
+          >
+            Listo para conducir
+          </button>
+        </div>
+
+        <div class="car-image-wrapper">
+          <img src="images/carro.jpg" alt="Vehículo" class="car-image" />
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div>
+            <small class="text-muted">Batería</small>
+            <div class="fw-semibold" id="status-battery-text">84%</div>
+          </div>
+          <div>
+            <small class="text-muted">Autonomía</small>
+            <div class="fw-semibold" id="status-range-text">172 km</div>
+          </div>
+          <div>
+            <small class="text-muted">Modo</small>
+            <div class="fw-semibold">Sport</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Card: Velocímetro -->
+      <section class="card-dark speed-card text-center">
+        <p class="mb-1 text-muted">Velocidad</p>
+        <div class="speed-circle mx-auto mb-2">
+          <h1 id="speed-value">65</h1>
+          <span class="unit">km/h</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <small class="text-muted">RPM 3500</small>
+          <small class="text-muted">Marcha 3ª</small>
+        </div>
+      </section>
+
+      <!-- Card: Mapa (mini) -->
+      <section class="card-dark map-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="card-title mb-0">Ubicación en tiempo real</h6>
+          <small class="text-muted">
+            <i class="bi bi-geo-alt-fill me-1"></i>Salvatierra, Gto.
+          </small>
+        </div>
+        <div id="map"></div>
+      </section>
+
+      <!-- Card: Música mini -->
+      <section class="card-dark music-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div>
+            <small class="text-muted">Reproduciendo ahora</small>
+            <div class="fw-semibold" id="track-title">
+              Softcore – The Neighbourhood
+            </div>
+          </div>
+          <button class="btn btn-icon">
+            <i class="bi bi-heart"></i>
+          </button>
+        </div>
+
+        <div class="progress music-progress mb-2">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            id="music-progress-bar"
+            style="width: 0%"
+          ></div>
+        </div>
+
+        <div class="d-flex justify-content-between small text-muted mb-2">
+          <span id="music-current-time">0:00</span>
+          <span id="music-duration">0:00</span>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 controls-row">
+          <button class="btn btn-icon" id="btn-prev">
+            <i class="bi bi-skip-backward-fill"></i>
+          </button>
+          <button
+            class="btn btn-icon btn-primary-circle btn-play-toggle"
+            data-role="main"
+            id="btn-play-main"
+          >
+            <i class="bi bi-play-fill"></i>
+          </button>
+          <button class="btn btn-icon" id="btn-next">
+            <i class="bi bi-skip-forward-fill"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- Card: Visualizador de sonido -->
+      <section class="card-dark visualizer-card">
+        <h6 class="card-title mb-2">Visualizador de sonido</h6>
+        <div class="sound-bars" id="sound-visualizer">
+          <span class="bar bar1"></span>
+          <span class="bar bar2"></span>
+          <span class="bar bar3"></span>
+          <span class="bar bar4"></span>
+          <span class="bar bar5"></span>
+        </div>
+      </section>
+
+      <!-- Card: Estado general -->
+      <section class="card-dark status-card">
+        <h6 class="card-title mb-3">Estado del vehículo</h6>
+        <div class="status-row">
+          <div>
+            <small class="text-muted">Batería</small>
+            <div class="fw-semibold">En buen estado</div>
+          </div>
+          <div>
+            <small class="text-muted">Temperatura motor</small>
+            <div class="fw-semibold" id="status-temp-text">72 °C</div>
+          </div>
+          <div>
+            <small class="text-muted">Presión llantas</small>
+            <div class="fw-semibold" id="status-tire-text">32 psi</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- PANTALLA 2: MAPA COMPLETO -->
+    <section
+      class="screen screen-map"
+      data-screen="map"
+      id="screen-map"
+    >
+      <div class="card-dark full-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="card-title mb-0">Mapa</h6>
+          <small class="text-muted">
+            <i class="bi bi-geo-alt-fill me-1"></i>Ruta del vehículo
+          </small>
+        </div>
+        <div id="map-full"></div>
+      </div>
+    </section>
+
+    <!-- PANTALLA 3: MÚSICA COMPLETA -->
+    <section
+      class="screen screen-music"
+      data-screen="music"
+      id="screen-music"
+    >
+      <div class="card-dark full-card text-center">
+        <h6 class="card-title mb-3">Reproductor de música</h6>
+        <p class="text-muted mb-3">
+          Controla la música mientras conduces.
+        </p>
+
+        <div class="track-info mb-3">
+          <h5 id="track-title-full">Softcore – The Neighbourhood</h5>
+        </div>
+
+        <div class="progress music-progress mb-2 w-100">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            id="music-progress-bar-full"
+            style="width: 0%"
+          ></div>
+        </div>
+
+        <div
+          class="d-flex justify-content-between small text-muted mb-4 w-100"
+        >
+          <span id="music-current-time-full">0:00</span>
+          <span id="music-duration-full">0:00</span>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 mb-3 controls-row">
+          <button class="btn btn-icon" id="btn-prev-full">
+            <i class="bi bi-skip-backward-fill"></i>
+          </button>
+          <button
+            class="btn btn-icon btn-primary-circle btn-play-toggle"
+            data-role="full"
+            id="btn-play-full"
+          >
+            <i class="bi bi-play-fill"></i>
+          </button>
+          <button class="btn btn-icon" id="btn-next-full">
+            <i class="bi bi-skip-forward-fill"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANTALLA 4: AJUSTES -->
+    <section
+      class="screen screen-settings"
+      data-screen="settings"
+      id="screen-settings"
+    >
+      <div class="card-dark full-card">
+        <h6 class="card-title mb-3">Ajustes</h6>
+        <ul class="settings-list">
+          <li>Brillo de pantalla</li>
+          <li>Modo oscuro / claro</li>
+          <li>Idioma</li>
+          <li>Alertas de velocidad</li>
+          <li>Notificaciones del sistema</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Barra de navegación (abajo o lateral) -->
+    <nav class="nav-bar">
+      <button
+        class="nav-btn active"
+        data-target="dashboard"
+        aria-label="Dashboard"
+      >
+        <i class="bi bi-speedometer2"></i>
+        <span>Inicio</span>
+      </button>
+      <button class="nav-btn" data-target="map" aria-label="Mapa">
+        <i class="bi bi-map"></i>
+        <span>Mapa</span>
+      </button>
+      <button class="nav-btn" data-target="music" aria-label="Música">
+        <i class="bi bi-music-note-beamed"></i>
+        <span>Música</span>
+      </button>
+      <button class="nav-btn" data-target="settings" aria-label="Ajustes">
+        <i class="bi bi-gear"></i>
+        <span>Ajustes</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MODAL: Estado general del coche -->
+  <div
+    class="modal fade"
+    id="statusModal"
+    tabindex="-1"
+    aria-labelledby="statusModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="statusModalLabel">
+            Estado del Halcón Peregrino
+          </h5>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Batería:</strong> <span id="modal-battery">84%</span></p>
+          <p>
+            <strong>Autonomía estimada:</strong>
+            <span id="modal-range">172 km</span>
+          </p>
+          <p>
+            <strong>Temperatura del motor:</strong>
+            <span id="modal-temp">72 °C</span>
+          </p>
+          <p>
+            <strong>Presión de llantas:</strong>
+            <span id="modal-tire">32 psi en las cuatro ruedas</span>
+          </p>
+          <p>
+            <strong>Estado general:</strong> Sin alertas críticas, listo para
+            conducir.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-success"
+            data-bs-dismiss="modal"
+          >
+            ¡Vamos!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUDIO (reproductor) -->
+  <audio
+    id="audio-player"
+    src="assets/music/demo.mp3"
+    preload="metadata"
+  ></audio>
+
+  <!-- JS: Bootstrap y Leaflet -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // ==========================
+    //   HORA Y FECHA
+    // ==========================
+    function updateTime() {
+      const now = new Date();
+      const time = now.toLocaleTimeString('es-MX', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      const date = now.toLocaleDateString('es-MX', {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+
+      document.getElementById('time').textContent = time;
+      const formattedDate =
+        date.charAt(0).toUpperCase() + date.slice(1).replace('.', '');
+      document.getElementById('date').textContent = formattedDate;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // ==========================
+    //   TEMA OSCURO / CLARO
+    // ==========================
+    const themeToggle = document.getElementById('theme-toggle');
+
+    function applyTheme(theme) {
+      if (theme === 'light') {
+        document.body.classList.add('light-mode');
+        themeToggle.innerHTML = '<i class="bi bi-sun"></i>';
+      } else {
+        document.body.classList.remove('light-mode');
+        themeToggle.innerHTML = '<i class="bi bi-moon"></i>';
+      }
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const current = document.body.classList.contains('light-mode')
+        ? 'light'
+        : 'dark';
+      applyTheme(current === 'light' ? 'dark' : 'light');
+    });
+
+    // ==========================
+    //   NAVEGACIÓN (TABS)
+    // ==========================
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const screens = document.querySelectorAll('.screen');
+
+    function showScreen(target) {
+      navButtons.forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.target === target);
+      });
+
+      screens.forEach((screen) => {
+        screen.classList.toggle(
+          'active-screen',
+          screen.dataset.screen === target
+        );
+      });
+
+      if (target === 'map' && window.mapFull) {
+        setTimeout(() => {
+          mapFull.invalidateSize();
+        }, 200);
+      }
+    }
+
+    navButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.target;
+        showScreen(target);
+      });
+    });
+
+    // ==========================
+    //   MAPAS (Leaflet)
+    // ==========================
+    let mapMini;
+    let mapFull;
+
+    function iniciarMapaMini() {
+      mapMini = L.map('map').setView([20.213, -100.879], 14);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+      }).addTo(mapMini);
+
+      L.marker([20.213, -100.879])
+        .addTo(mapMini)
+        .bindPopup('Ubicación de ejemplo del vehículo');
+    }
+
+    function iniciarMapaFull() {
+      mapFull = L.map('map-full').setView([20.213, -100.879], 14);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+      }).addTo(mapFull);
+
+      L.marker([20.213, -100.879])
+        .addTo(mapFull)
+        .bindPopup('Ruta principal del Halcón Peregrino');
+    }
+
+    // ==========================
+    //   ASISTENTE DE VOZ
+    // ==========================
+    function speak(text) {
+      if (!('speechSynthesis' in window)) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'es-MX';
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function greetUser() {
+      speak('Bienvenido Halcón Peregrino');
+    }
+
+    // ==========================
+    //   ESTADO DEL COCHE / MODAL
+    // ==========================
+    const carStatus = {
+      battery: 84,
+      range: 172,
+      temp: 72,
+      tire: 32
+    };
+
+    const btnReady = document.getElementById('btn-ready');
+
+    btnReady.addEventListener('click', () => {
+      document.getElementById('modal-battery').textContent =
+        carStatus.battery + '%';
+      document.getElementById('modal-range').textContent =
+        carStatus.range + ' km';
+      document.getElementById('modal-temp').textContent =
+        carStatus.temp + ' °C';
+      document.getElementById('modal-tire').textContent =
+        carStatus.tire + ' psi en las cuatro ruedas';
+
+      const modal = new bootstrap.Modal(
+        document.getElementById('statusModal')
+      );
+      modal.show();
+
+      speak(
+        `Estado general del Halcón Peregrino. Batería al ${carStatus.battery} por ciento, autonomía estimada ${carStatus.range} kilómetros, temperatura del motor ${carStatus.temp} grados, y presión de llantas estable.`
+      );
+    });
+
+    // ==========================
+    //   REPRODUCTOR DE MÚSICA
+    // ==========================
+    const audio = document.getElementById('audio-player');
+    const playButtons = document.querySelectorAll('.btn-play-toggle');
+
+    const progressMini = document.getElementById('music-progress-bar');
+    const progressFull = document.getElementById('music-progress-bar-full');
+    const currentTimeMini = document.getElementById('music-current-time');
+    const durationMini = document.getElementById('music-duration');
+    const currentTimeFull = document.getElementById(
+      'music-current-time-full'
+    );
+    const durationFull = document.getElementById('music-duration-full');
+
+    const soundVisualizer = document.getElementById('sound-visualizer');
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60)
+        .toString()
+        .padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function updatePlayButtons(isPlaying) {
+      playButtons.forEach((btn) => {
+        const icon = btn.querySelector('i');
+        if (isPlaying) {
+          icon.classList.remove('bi-play-fill');
+          icon.classList.add('bi-pause-fill');
+        } else {
+          icon.classList.remove('bi-pause-fill');
+          icon.classList.add('bi-play-fill');
+        }
+      });
+
+      if (soundVisualizer) {
+        soundVisualizer.classList.toggle('active', isPlaying);
+      }
+    }
+
+    playButtons.forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        try {
+          if (audio.paused) {
+            await audio.play();
+            updatePlayButtons(true);
+          } else {
+            audio.pause();
+            updatePlayButtons(false);
+          }
+        } catch (e) {
+          console.error('Error al reproducir audio:', e);
+        }
+      });
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      const dur = audio.duration;
+      durationMini.textContent = formatTime(dur);
+      durationFull.textContent = formatTime(dur);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      const current = audio.currentTime;
+      const dur = audio.duration || 1;
+      const percent = (current / dur) * 100;
+
+      progressMini.style.width = percent + '%';
+      progressFull.style.width = percent + '%';
+
+      currentTimeMini.textContent = formatTime(current);
+      currentTimeFull.textContent = formatTime(current);
+    });
+
+    audio.addEventListener('ended', () => {
+      updatePlayButtons(false);
+    });
+
+    // ==========================
+    //   INICIALIZACIÓN GLOBAL
+    // ==========================
+    window.addEventListener('load', () => {
+      iniciarMapaMini();
+      iniciarMapaFull();
+
+      setTimeout(greetUser, 3400);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+	"folders": [
+		{
+			"path": "../../html-Practicas"
+		},
+		{
+			"path": "../../Proyecto"
+		},
+		{
+			"path": "../../assets"
+		},
+		{
+			"path": "../../../../Downloads/6to semestre/6to semestre/desarrollo web/u2/examen y portafolio/Examen final"
+		},
+		{
+			"path": "../../../../../../xampp/apps/prueba_web"
+		},
+		{
+			"path": "../../ProyectoFinal"
+		},
+		{
+			"path": "../../../../Downloads/AgenciaViajes-php-master"
+		},
+		{
+			"path": "../../Picks"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "HalconDashboard"
+	}
+}

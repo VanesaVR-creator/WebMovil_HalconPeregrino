@@ -1,0 +1,573 @@
+/* ==========================
+   PALETA TEMA
+   ========================== */
+:root {
+  --bg-main: #050814;
+  --bg-card: #111827;
+  --bg-card-soft: #0b1120;
+  --accent: #4cc9f0;
+  --accent-2: #22c55e;
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+  --border-soft: #1f2937;
+}
+
+/* Light mode */
+body.light-mode {
+  --bg-main: #e5e7eb;
+  --bg-card: #ffffff;
+  --bg-card-soft: #f3f4f6;
+  --accent: #2563eb;
+  --accent-2: #16a34a;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --border-soft: #d1d5db;
+}
+
+/* ==========================
+   RESET
+   ========================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top, var(--bg-card), var(--bg-main));
+  color: var(--text-main);
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
+}
+
+/* ==========================
+   SPLASH
+   ========================== */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  z-index: 9999;
+  animation: fadeSplash 3.4s ease forwards;
+}
+
+@keyframes fadeSplash {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* ==========================
+   LAYOUT GENERAL
+   ========================== */
+.dashboard {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  padding-bottom: 72px; /* espacio nav inferior */
+}
+
+/* Barra superior */
+.top-bar {
+  padding: 6px 4px 10px;
+  gap: 8px;
+}
+
+.time-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.date-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.app-name {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  font-size: 0.9rem;
+}
+
+.weather-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.85);
+  font-size: 0.75rem;
+}
+
+body.light-mode .weather-pill {
+  background: rgba(243, 244, 246, 0.95);
+}
+
+.weather-pill i {
+  color: var(--accent);
+}
+
+/* Botón tema */
+.btn-theme {
+  border-radius: 999px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+body.light-mode .btn-theme {
+  background: #ffffff;
+}
+
+.btn-theme i {
+  font-size: 1rem;
+}
+
+/* Avatar */
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ==========================
+   TARJETAS
+   ========================== */
+.card-dark {
+  background: radial-gradient(circle at top left, var(--bg-card), var(--bg-main));
+  border-radius: 20px;
+  padding: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+body.light-mode .card-dark {
+  box-shadow: 0 10px 20px rgba(148, 163, 184, 0.35);
+}
+
+.card-title {
+  font-size: 0.9rem;
+}
+
+/* Grid principal (portrait) */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "car"
+    "speed"
+    "map"
+    "music"
+    "visualizer"
+    "status";
+  gap: 12px;
+  margin-top: 4px;
+  padding-bottom: 8px;
+}
+
+.car-card {
+  grid-area: car;
+}
+
+.speed-card {
+  grid-area: speed;
+}
+
+.map-card {
+  grid-area: map;
+}
+
+.music-card {
+  grid-area: music;
+}
+
+.visualizer-card {
+  grid-area: visualizer;
+}
+
+.status-card {
+  grid-area: status;
+}
+
+/* Imagen del coche */
+.car-image-wrapper {
+  margin-top: 8px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #020617;
+}
+
+body.light-mode .car-image-wrapper {
+  background: #e5e5e5;
+}
+
+.car-image {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Botón "Listo para conducir" */
+.status-pill {
+  border-radius: 999px;
+  border: 1px solid #22c55e;
+  padding: 3px 12px;
+  background: rgba(34, 197, 94, 0.15);
+  color: #bbf7d0;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+body.light-mode .status-pill {
+  background: rgba(34, 197, 94, 0.1);
+  color: #166534;
+}
+
+/* Velocímetro */
+.speed-circle {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 8px solid var(--accent-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.speed-circle h1 {
+  font-size: 2.8rem;
+  margin: 0;
+  line-height: 1;
+}
+
+.speed-circle .unit {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Mapa */
+#map,
+#map-full {
+  width: 100%;
+  min-height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Música */
+.music-progress {
+  background-color: rgba(15, 23, 42, 0.9);
+  height: 6px;
+  border-radius: 999px;
+}
+
+.music-progress .progress-bar {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+}
+
+body.light-mode .music-progress {
+  background-color: #e5e7eb;
+}
+
+/* Botones icono */
+.btn-icon {
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-main);
+}
+
+body.light-mode .btn-icon {
+  background: #f3f4f6;
+}
+
+.btn-icon i {
+  font-size: 1rem;
+}
+
+.btn-primary-circle {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, var(--accent-2), #4ade80);
+  color: #020617;
+  box-shadow: 0 12px 20px rgba(34, 197, 94, 0.6);
+}
+
+.controls-row {
+  margin-top: 4px;
+}
+
+/* Estado vehículo */
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 0.78rem;
+}
+
+/* ==========================
+   VISUALIZADOR DE SONIDO
+   ========================== */
+.sound-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 40px;
+  margin-top: 4px;
+}
+
+.sound-bars .bar {
+  width: 6px;
+  border-radius: 999px;
+  background: #38bdf8;
+  animation: barBounce 0.9s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.sound-bars .bar1 {
+  height: 45%;
+  animation-delay: 0s;
+}
+.sound-bars .bar2 {
+  height: 80%;
+  animation-delay: 0.1s;
+}
+.sound-bars .bar3 {
+  height: 65%;
+  animation-delay: 0.2s;
+}
+.sound-bars .bar4 {
+  height: 90%;
+  animation-delay: 0.15s;
+}
+.sound-bars .bar5 {
+  height: 35%;
+  animation-delay: 0.05s;
+}
+
+/* Cuando el audio está reproduciéndose */
+.sound-bars.active .bar {
+  animation-play-state: running;
+}
+
+@keyframes barBounce {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.5);
+  }
+}
+
+/* ==========================
+   NAVEGACIÓN
+   ========================== */
+.nav-bar {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 10px;
+  height: 56px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.98);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 4px 6px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  backdrop-filter: blur(10px);
+  z-index: 999;
+}
+
+body.light-mode .nav-bar {
+  background: rgba(255, 255, 255, 0.97);
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.nav-btn i {
+  font-size: 1.1rem;
+}
+
+.nav-btn.active {
+  color: var(--accent);
+}
+
+/* ==========================
+   PANTALLAS (TABS)
+   ========================== */
+.screen {
+  display: none;
+}
+
+.screen.active-screen {
+  display: block;
+}
+
+/* La pantalla principal mantiene el grid */
+.main-grid.screen.active-screen {
+  display: grid;
+}
+
+/* Tarjetas de pantalla completa */
+.full-card {
+  height: calc(100vh - 110px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ajuste mapa full para que crezca */
+#map-full {
+  flex: 1;
+  min-height: 100%;
+}
+
+/* Lista de ajustes */
+.settings-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.settings-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 0.9rem;
+}
+
+/* ==========================
+   MODAL
+   ========================== */
+.modal-dark {
+  background: radial-gradient(circle at top, var(--bg-card), var(--bg-main));
+  color: var(--text-main);
+}
+
+.modal-dark .modal-header,
+.modal-dark .modal-footer {
+  border-color: var(--border-soft);
+}
+
+/* ==========================
+   ORIENTACIÓN HORIZONTAL
+   ========================== */
+@media (orientation: landscape) and (min-width: 768px) {
+  .dashboard {
+    flex-direction: row;
+    padding-left: 80px;
+  }
+
+  .top-bar {
+    position: fixed;
+    top: 8px;
+    left: 80px;
+    right: 16px;
+    z-index: 10;
+    background: transparent;
+  }
+
+  /* Dashboard principal debajo de la barra */
+  .main-grid {
+    margin-top: 64px;
+    padding-right: 8px;
+    grid-template-columns: 1.2fr 1fr;
+    grid-template-areas:
+      "car speed"
+      "map map"
+      "music visualizer"
+      "status status";
+  }
+
+  /* Las otras pantallas también bajan para no encimarse */
+  .screen-map,
+  .screen-music,
+  .screen-settings {
+    margin-top: 72px;
+    padding-right: 8px;
+  }
+
+  .full-card {
+    height: calc(100vh - 140px);
+  }
+
+  .nav-bar {
+    position: fixed;
+    top: 20px;
+    left: 10px;
+    bottom: auto;
+    width: 56px;
+    height: auto;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 8px 4px;
+    border-radius: 24px;
+  }
+
+  .nav-btn span {
+    display: none;
+  }
+
+  .nav-btn {
+    margin: 4px 0;
+  }
+}
+
+/* ==========================
+   PANTALLAS PEQUEÑAS
+   ========================== */
+@media (max-width: 360px) {
+  .speed-circle {
+    width: 150px;
+    height: 150px;
+  }
+
+  .dashboard {
+    padding: 8px;
+    padding-bottom: 68px;
+  }
+
+  .nav-bar {
+    left: 8px;
+    right: 8px;
+  }
+}
