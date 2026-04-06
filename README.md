@@ -137,10 +137,8 @@ El proyecto TonyKarts busca integrar soluciones digitales e inteligentes para el
 
 Este trabajo fue asesorado por el **Profesor Francisco Javier Montesillo Puente**, docente del Instituto Tecnológico Superior de Salvatierra (ITESS), dentro de la carrera de **Ingeniería en Tecnologías de la Información y Comunicaciones**.
 
-El desarrollo del dashboard fue realizado por las alumnas:
+El desarrollo del dashboard fue realizado por:
 
 - **Vanesa Velázquez Rodríguez**  
-- **Perla García Pérez**  
-- **Andrea Vega Villanueva**
 
 Como parte del componente tecnológico del proyecto, este dashboard web representa la capa visual e interactiva utilizada para mostrar datos clave del vehículo TonyKarts, incluyendo velocidad, batería, clima, posición GPS, estado del motor y panel de conducción dinámico, entre otros indicadores relevantes para la competencia.
